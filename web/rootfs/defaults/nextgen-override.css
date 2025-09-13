@@ -1,0 +1,226 @@
+/* NextGen Meet - Jitsi Meet UI Override */
+
+/* Global Variables */
+:root {
+    --nextgen-primary: #1976d2;
+    --nextgen-secondary: #ffffff;
+    --nextgen-accent: #00bcd4;
+    --nextgen-surface: #f5f5f5;
+    --nextgen-background: #ffffff;
+    --nextgen-text: #212121;
+    --nextgen-text-secondary: #757575;
+    --nextgen-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    --nextgen-border-radius: 12px;
+    --nextgen-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Body Override */
+body.nextgen-meet {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #1976d2 0%, #00bcd4 100%);
+    color: var(--nextgen-text);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Welcome Page Override */
+.nextgen-meet .welcome {
+    background: linear-gradient(135deg, #1976d2 0%, #00bcd4 100%);
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.nextgen-meet .welcome.without-content {
+    background: linear-gradient(135deg, #1976d2 0%, #00bcd4 100%);
+}
+
+/* Header Override */
+.nextgen-meet .header {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 2rem 0;
+}
+
+.nextgen-meet .header-text-title {
+    color: white !important;
+    font-weight: 700;
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.nextgen-meet .header-text-subtitle {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 1.3rem;
+    font-weight: 300;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Watermark Override */
+.nextgen-meet .welcome-watermark {
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+}
+
+/* Button Override */
+.nextgen-meet .welcome-page-button {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    backdrop-filter: blur(10px);
+    border-radius: var(--nextgen-border-radius);
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: var(--nextgen-transition);
+    box-shadow: var(--nextgen-shadow);
+}
+
+.nextgen-meet .welcome-page-button:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.nextgen-meet .welcome-page-button:active {
+    transform: translateY(0);
+}
+
+/* Input Override */
+.nextgen-meet .enter-room-input {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    backdrop-filter: blur(10px);
+    border-radius: var(--nextgen-border-radius);
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    transition: var(--nextgen-transition);
+}
+
+.nextgen-meet .enter-room-input:focus {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    outline: none;
+}
+
+.nextgen-meet .enter-room-input::placeholder {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Cards Override */
+.nextgen-meet .welcome-card {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: var(--nextgen-shadow);
+    transition: var(--nextgen-transition);
+}
+
+.nextgen-meet .welcome-card:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.nextgen-meet .welcome-card h2 {
+    color: white !important;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.nextgen-meet .welcome-card .title {
+    color: white !important;
+    font-weight: 500;
+}
+
+.nextgen-meet .welcome-card .subtitle {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-weight: 300;
+}
+
+/* Toolbox Override */
+.nextgen-meet .toolbox-button {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    transition: var(--nextgen-transition);
+}
+
+.nextgen-meet .toolbox-button:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.05);
+}
+
+/* Meeting List Override */
+.nextgen-meet .meetings-list .item {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: var(--nextgen-border-radius);
+    margin-bottom: 0.5rem;
+    transition: var(--nextgen-transition);
+}
+
+.nextgen-meet .meetings-list .item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    transform: translateX(5px);
+}
+
+/* Icons Override */
+.nextgen-meet .jitsi-icon svg {
+    fill: white !important;
+}
+
+.nextgen-meet .delete-meeting:hover svg {
+    fill: #ff5252 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nextgen-meet .header-text-title {
+        font-size: 2rem;
+    }
+    
+    .nextgen-meet .header-text-subtitle {
+        font-size: 1rem;
+    }
+    
+    .nextgen-meet .welcome-page-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .nextgen-meet .enter-room-input {
+        padding: 0.8rem 1rem;
+        font-size: 1rem;
+    }
+}
+
+/* Animation Override */
+.nextgen-meet * {
+    transition: var(--nextgen-transition);
+}
+
+/* Glass Morphism Effect */
+.nextgen-meet .glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--nextgen-border-radius);
+}
+
+/* Glow Effect */
+.nextgen-meet .glow {
+    box-shadow: 0 0 20px rgba(25, 118, 210, 0.3);
+}
+
+.nextgen-meet .glow:hover {
+    box-shadow: 0 0 30px rgba(25, 118, 210, 0.5);
+}

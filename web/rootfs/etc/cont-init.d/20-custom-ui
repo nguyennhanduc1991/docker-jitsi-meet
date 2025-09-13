@@ -20,6 +20,11 @@ if [ -f "/custom/index.html" ]; then
     echo "Đã copy index.html từ /custom"
 fi
 
+if [ -f "/custom/jitsi-index.html" ]; then
+    cp /custom/jitsi-index.html /config/jitsi-index.html
+    echo "Đã copy jitsi-index.html từ /custom"
+fi
+
 # Tạo thư mục images nếu chưa có
 mkdir -p /config/images
 
@@ -66,6 +71,11 @@ if [ -f "/custom/nextgen-animations.css" ]; then
     echo "Đã copy nextgen-animations.css từ /custom"
 fi
 
+if [ -f "/custom/nextgen-override.css" ]; then
+    cp /custom/nextgen-override.css /config/nextgen-override.css
+    echo "Đã copy nextgen-override.css từ /custom"
+fi
+
 if [ -f "/custom/nextgen-design-tokens.js" ]; then
     cp /custom/nextgen-design-tokens.js /config/nextgen-design-tokens.js
     echo "Đã copy nextgen-design-tokens.js từ /custom"
@@ -91,6 +101,12 @@ fi
 # Cấu hình nginx để serve các file tùy chỉnh
 cat > /etc/nginx/conf.d/custom-ui.conf << 'EOF'
 # Cấu hình cho giao diện tùy chỉnh NextGen Meet
+
+# Override main index.html
+location = / {
+    try_files /config/jitsi-index.html /index.html;
+    add_header Content-Type text/html;
+}
 
 # CSS Files
 location /css/custom.css {
@@ -125,6 +141,12 @@ location /css/nextgen-toolbar.css {
 
 location /css/nextgen-video.css {
     alias /config/nextgen-video.css;
+    add_header Content-Type text/css;
+    expires 1d;
+}
+
+location /css/nextgen-override.css {
+    alias /config/nextgen-override.css;
     add_header Content-Type text/css;
     expires 1d;
 }
