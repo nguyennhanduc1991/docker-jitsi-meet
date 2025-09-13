@@ -4,29 +4,20 @@
 
 echo "Cấu hình giao diện tùy chỉnh..."
 
-# Copy các file cấu hình tùy chỉnh từ /custom volume
+# Copy các file cấu hình tùy chỉnh từ /custom (built into image)
 if [ -f "/custom/interface_config.js" ]; then
     cp /custom/interface_config.js /config/interface_config.js
     echo "Đã copy interface_config.js từ /custom"
-elif [ -f "/defaults/interface_config.js" ]; then
-    cp /defaults/interface_config.js /config/interface_config.js
-    echo "Đã copy interface_config.js từ /defaults"
 fi
 
 if [ -f "/custom/custom.css" ]; then
     cp /custom/custom.css /config/custom.css
     echo "Đã copy custom.css từ /custom"
-elif [ -f "/defaults/custom.css" ]; then
-    cp /defaults/custom.css /config/custom.css
-    echo "Đã copy custom.css từ /defaults"
 fi
 
 if [ -f "/custom/index.html" ]; then
     cp /custom/index.html /config/index.html
     echo "Đã copy index.html từ /custom"
-elif [ -f "/defaults/index.html" ]; then
-    cp /defaults/index.html /config/index.html
-    echo "Đã copy index.html từ /defaults"
 fi
 
 # Tạo thư mục images nếu chưa có
