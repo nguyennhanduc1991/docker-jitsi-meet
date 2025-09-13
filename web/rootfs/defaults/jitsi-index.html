@@ -160,35 +160,46 @@
         </div>
     </div>
     
-    <!-- Interface Config - Load trước tất cả -->
-    <script src="interface_config.js"></script>
-    
-    <!-- Global config fallback -->
+    <!-- Global config - Load trước tất cả -->
     <script>
-        if (typeof interfaceConfig === 'undefined') {
-            window.interfaceConfig = {
-                TOOLBAR_BUTTONS: ['microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen', 'fodeviceselection', 'hangup', 'profile', 'chat', 'recording', 'livestreaming', 'etherpad', 'sharedvideo', 'settings', 'raisehand', 'videoquality', 'filmstrip', 'invite', 'feedback', 'stats', 'shortcuts', 'tileview', 'videobackgroundblur', 'download', 'help', 'mute-everyone', 'e2ee', 'security'],
-                SHOW_JITSI_WATERMARK: false,
-                SHOW_WATERMARK_FOR_GUESTS: false,
-                SHOW_POWERED_BY: false,
-                DEFAULT_LOGO_URL: 'images/jitsilogo.png',
-                PROVIDER_NAME: 'thanhnguyen.group',
-                APP_NAME: 'NextGen Meet',
-                LANG_DETECTION: true,
-                DEFAULT_LANGUAGE: 'vi',
-                DISABLE_DOMINANT_SPEAKER_INDICATOR: false,
-                DISABLE_FOCUS_INDICATOR: false,
-                DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
-                DISABLE_PRESENCE_STATUS: false,
-                DISABLE_RINGING: false,
-                AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
-                AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
-                POLICY_LOGO: null,
-                PROVIDER_URL: 'https://thanhnguyen.group'
-            };
-            console.log('NextGen Meet: Created fallback interfaceConfig');
-        }
+        // Tạo interfaceConfig ngay lập tức
+        window.interfaceConfig = {
+            TOOLBAR_BUTTONS: ['microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen', 'fodeviceselection', 'hangup', 'profile', 'chat', 'recording', 'livestreaming', 'etherpad', 'sharedvideo', 'settings', 'raisehand', 'videoquality', 'filmstrip', 'invite', 'feedback', 'stats', 'shortcuts', 'tileview', 'videobackgroundblur', 'download', 'help', 'mute-everyone', 'e2ee', 'security'],
+            SHOW_JITSI_WATERMARK: false,
+            SHOW_WATERMARK_FOR_GUESTS: false,
+            SHOW_POWERED_BY: false,
+            DEFAULT_LOGO_URL: 'images/jitsilogo.png',
+            PROVIDER_NAME: 'thanhnguyen.group',
+            APP_NAME: 'NextGen Meet',
+            LANG_DETECTION: true,
+            DEFAULT_LANGUAGE: 'vi',
+            DISABLE_DOMINANT_SPEAKER_INDICATOR: false,
+            DISABLE_FOCUS_INDICATOR: false,
+            DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
+            DISABLE_PRESENCE_STATUS: false,
+            DISABLE_RINGING: false,
+            AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
+            AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
+            POLICY_LOGO: null,
+            PROVIDER_URL: 'https://thanhnguyen.group'
+        };
+        console.log('NextGen Meet: Created interfaceConfig');
+        
+        // Tạo config object cho Jitsi Meet
+        window.config = {
+            hosts: {
+                domain: 'meet.thanhnguyen.group',
+                muc: 'conference.meet.thanhnguyen.group'
+            },
+            bosh: '/http-bind',
+            websocket: 'wss://meet.thanhnguyen.group/xmpp-websocket',
+            clientNode: 'http://jitsi.org/jitsimeet'
+        };
+        console.log('NextGen Meet: Created config');
     </script>
+    
+    <!-- Interface Config - Load sau -->
+    <script src="interface_config.js"></script>
     
     <!-- NextGen Meet JavaScript -->
     <script src="nextgen-inject.js"></script>

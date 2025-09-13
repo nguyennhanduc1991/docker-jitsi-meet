@@ -278,9 +278,14 @@ if [ -f "/etc/nginx/conf.d/nginx-custom.conf" ]; then
     rm -f /etc/nginx/conf.d/nginx-custom.conf
 fi
 
-# Tạo nginx config đơn giản hơn
-echo "Tạo nginx config đơn giản hơn..."
-cat > /etc/nginx/conf.d/nextgen-meet.conf << 'EOF'
+# Xóa nginx config cũ
+echo "Xóa nginx config cũ..."
+rm -f /etc/nginx/conf.d/nextgen-meet.conf
+
+# Tạo nginx config mới trong main config
+echo "Tạo nginx config mới trong main config..."
+cat >> /etc/nginx/nginx.conf << 'EOF'
+
 # NextGen Meet Configuration
 location /js/nextgen-design-tokens.js {
     alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
