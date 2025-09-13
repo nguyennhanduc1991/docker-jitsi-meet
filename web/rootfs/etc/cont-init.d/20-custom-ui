@@ -315,6 +315,22 @@ server {
         expires 7d;
     }
 
+    # Serve Jitsi Meet core JS files với MIME type đúng
+    location /libs/ {
+        alias /usr/share/jitsi-meet/libs/;
+        add_header Content-Type "application/javascript; charset=utf-8";
+        add_header Cache-Control "public, max-age=86400";
+        expires 1d;
+    }
+
+    # Serve all JS files với MIME type đúng
+    location ~* \.js$ {
+        root /usr/share/jitsi-meet;
+        add_header Content-Type "application/javascript; charset=utf-8";
+        add_header Cache-Control "public, max-age=86400";
+        expires 1d;
+    }
+
     # Fallback: Serve JS files từ thư mục root
     location /nextgen-design-tokens.js {
         alias /usr/share/jitsi-meet/nextgen-design-tokens.js;
