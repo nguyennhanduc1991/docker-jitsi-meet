@@ -259,7 +259,7 @@ if [ ! -f "/usr/share/jitsi-meet/images/favicon.ico" ]; then
     fi
 fi
 
-# Xóa nginx config conflict và dùng cách đơn giản
+# Xóa nginx config conflict và tạo config đúng cách
 echo "Xóa nginx config conflict..."
 
 # Xóa nginx-custom.conf nếu có conflict
@@ -268,8 +268,29 @@ if [ -f "/etc/nginx/conf.d/nginx-custom.conf" ]; then
     rm -f /etc/nginx/conf.d/nginx-custom.conf
 fi
 
-# Xóa nginx config của tôi để tránh conflict
-rm -f /etc/nginx/conf.d/nextgen-js.conf
+# Tạo nginx config đúng cách để serve JS files
+echo "Tạo nginx config để serve JS files..."
+cat > /etc/nginx/conf.d/nextgen-js.conf << 'EOF'
+# Serve NextGen Meet JS files
+location /js/nextgen-design-tokens.js {
+    alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
+    add_header Content-Type application/javascript;
+    expires 1d;
+}
+
+location /js/nextgen-inject.js {
+    alias /usr/share/jitsi-meet/js/nextgen-inject.js;
+    add_header Content-Type application/javascript;
+    expires 1d;
+}
+
+# Serve interface_config.js
+location /interface_config.js {
+    alias /usr/share/jitsi-meet/interface_config.js;
+    add_header Content-Type application/javascript;
+    expires 1d;
+}
+EOF
 
 # Kiểm tra files tồn tại
 echo "Kiểm tra files tồn tại..."
@@ -279,8 +300,8 @@ ls -la /usr/share/jitsi-meet/interface_config.js
 # Files đã được copy trực tiếp vào Jitsi Meet directory
 echo "Files đã được copy trực tiếp vào Jitsi Meet directory"
 
-# Test nginx config sau khi xóa conflict
-echo "Test nginx config sau khi xóa conflict..."
+# Test nginx config sau khi tạo config mới
+echo "Test nginx config sau khi tạo config mới..."
 nginx -t
 if [ $? -eq 0 ]; then
     echo "Nginx config test passed"
@@ -293,6 +314,8 @@ if [ $? -eq 0 ]; then
     fi
 else
     echo "Nginx config test failed"
+    echo "Xem nginx config:"
+    cat /etc/nginx/conf.d/nextgen-js.conf
 fi
 
 # Debug: Kiểm tra nội dung JS files
@@ -303,6 +326,15 @@ echo "=== nextgen-inject.js ==="
 head -5 /usr/share/jitsi-meet/js/nextgen-inject.js
 echo "=== interface_config.js ==="
 head -5 /usr/share/jitsi-meet/interface_config.js
+
+# Test JS files accessible
+echo "Test JS files accessible..."
+echo "Testing nextgen-design-tokens.js..."
+curl -I http://localhost/js/nextgen-design-tokens.js 2>/dev/null | head -3 || echo "Cannot test locally"
+echo "Testing nextgen-inject.js..."
+curl -I http://localhost/js/nextgen-inject.js 2>/dev/null | head -3 || echo "Cannot test locally"
+echo "Testing interface_config.js..."
+curl -I http://localhost/interface_config.js 2>/dev/null | head -3 || echo "Cannot test locally"
 
 echo "NextGen Meet files đã được copy trực tiếp vào Jitsi Meet directory"
 
