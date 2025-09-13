@@ -282,6 +282,9 @@ fi
 echo "Tạo nginx config đúng syntax với server block..."
 cat > /etc/nginx/conf.d/nextgen-meet.conf << 'EOF'
 server {
+    listen 80;
+    server_name _;
+    
     # Serve NextGen Meet JS files
     location /js/nextgen-design-tokens.js {
         alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
