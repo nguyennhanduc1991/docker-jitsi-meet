@@ -229,8 +229,16 @@ if [ ! -f "/usr/share/jitsi-meet/images/favicon.ico" ]; then
         cp /usr/share/jitsi-meet/favicon.ico /usr/share/jitsi-meet/images/favicon.ico
         echo "Đã copy favicon từ Jitsi Meet gốc"
     else
-        # Tạo favicon đơn giản (có thể thêm logic tạo favicon ở đây)
-        echo "Tạo favicon placeholder"
+        # Tạo favicon đơn giản
+        echo "Tạo favicon placeholder..."
+        # Copy favicon từ Jitsi Meet gốc nếu có
+        if [ -f "/usr/share/jitsi-meet/favicon.ico" ]; then
+            cp /usr/share/jitsi-meet/favicon.ico /usr/share/jitsi-meet/images/favicon.ico
+            echo "Đã copy favicon từ Jitsi Meet gốc"
+        else
+            # Tạo favicon đơn giản bằng cách copy từ thư mục khác
+            find /usr/share -name "favicon.ico" -type f 2>/dev/null | head -1 | xargs -I {} cp {} /usr/share/jitsi-meet/images/favicon.ico 2>/dev/null || echo "Không tìm thấy favicon để copy"
+        fi
     fi
 fi
 
