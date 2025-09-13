@@ -97,14 +97,85 @@ if [ -f "/custom/images/welcome-background.png" ]; then
     echo "Đã copy welcome-background.png từ /custom"
 fi
 
+# Copy NextGen CSS files trực tiếp vào thư mục Jitsi Meet
+echo "Copy NextGen files trực tiếp vào Jitsi Meet directory..."
+
+# Tạo thư mục css nếu chưa có
+mkdir -p /usr/share/jitsi-meet/css
+mkdir -p /usr/share/jitsi-meet/js
+
+# Copy NextGen CSS files
+if [ -f "/config/nextgen-variables.css" ]; then
+    cp /config/nextgen-variables.css /usr/share/jitsi-meet/css/nextgen-variables.css
+    echo "Đã copy nextgen-variables.css vào /usr/share/jitsi-meet/css/"
+fi
+
+if [ -f "/config/nextgen-mixins.css" ]; then
+    cp /config/nextgen-mixins.css /usr/share/jitsi-meet/css/nextgen-mixins.css
+    echo "Đã copy nextgen-mixins.css vào /usr/share/jitsi-meet/css/"
+fi
+
+if [ -f "/config/nextgen-components.css" ]; then
+    cp /config/nextgen-components.css /usr/share/jitsi-meet/css/nextgen-components.css
+    echo "Đã copy nextgen-components.css vào /usr/share/jitsi-meet/css/"
+fi
+
+if [ -f "/config/nextgen-toolbar.css" ]; then
+    cp /config/nextgen-toolbar.css /usr/share/jitsi-meet/css/nextgen-toolbar.css
+    echo "Đã copy nextgen-toolbar.css vào /usr/share/jitsi-meet/css/"
+fi
+
+if [ -f "/config/nextgen-video.css" ]; then
+    cp /config/nextgen-video.css /usr/share/jitsi-meet/css/nextgen-video.css
+    echo "Đã copy nextgen-video.css vào /usr/share/jitsi-meet/css/"
+fi
+
+if [ -f "/config/nextgen-animations.css" ]; then
+    cp /config/nextgen-animations.css /usr/share/jitsi-meet/css/nextgen-animations.css
+    echo "Đã copy nextgen-animations.css vào /usr/share/jitsi-meet/css/"
+fi
+
+if [ -f "/config/nextgen-override.css" ]; then
+    cp /config/nextgen-override.css /usr/share/jitsi-meet/css/nextgen-override.css
+    echo "Đã copy nextgen-override.css vào /usr/share/jitsi-meet/css/"
+fi
+
+if [ -f "/config/custom.css" ]; then
+    cp /config/custom.css /usr/share/jitsi-meet/css/custom.css
+    echo "Đã copy custom.css vào /usr/share/jitsi-meet/css/"
+fi
+
+# Copy NextGen JS files
+if [ -f "/config/nextgen-design-tokens.js" ]; then
+    cp /config/nextgen-design-tokens.js /usr/share/jitsi-meet/js/nextgen-design-tokens.js
+    echo "Đã copy nextgen-design-tokens.js vào /usr/share/jitsi-meet/js/"
+fi
+
+if [ -f "/config/nextgen-inject.js" ]; then
+    cp /config/nextgen-inject.js /usr/share/jitsi-meet/js/nextgen-inject.js
+    echo "Đã copy nextgen-inject.js vào /usr/share/jitsi-meet/js/"
+fi
+
+# Override main index.html
+if [ -f "/config/jitsi-index.html" ]; then
+    cp /config/jitsi-index.html /usr/share/jitsi-meet/index.html
+    echo "Đã override index.html với NextGen Meet"
+fi
+
+# Override interface_config.js
+if [ -f "/config/interface_config.js" ]; then
+    cp /config/interface_config.js /usr/share/jitsi-meet/interface_config.js
+    echo "Đã override interface_config.js với NextGen Meet"
+fi
+
 # Tạo file welcome background mặc định nếu chưa có
 if [ ! -f "/config/images/welcome-background.png" ]; then
     echo "Tạo welcome background mặc định..."
     # Có thể thêm logic tạo background ở đây
 fi
 
-# Cấu hình nginx để serve các file tùy chỉnh
-cat > /etc/nginx/conf.d/custom-ui.conf << 'EOF'
+# Không cần nginx config nữa vì đã copy trực tiếp files
+# cat > /etc/nginx/conf.d/custom-ui.conf << 'EOF'
 # Cấu hình cho giao diện tùy chỉnh NextGen Meet
 
 # Override main index.html
@@ -188,20 +259,9 @@ location /js/nextgen-inject.js {
     add_header Content-Type application/javascript;
     expires 1d;
 }
-EOF
+# EOF
 
-# Reload nginx để áp dụng config mới
-if [ -f "/var/run/nginx.pid" ]; then
-    nginx -s reload
-    echo "Đã reload nginx config"
-else
-    # Nếu nginx chưa chạy, test config trước
-    nginx -t
-    if [ $? -eq 0 ]; then
-        echo "Nginx config test passed"
-    else
-        echo "Nginx config test failed"
-    fi
-fi
+# Không cần reload nginx nữa
+echo "NextGen Meet files đã được copy trực tiếp vào Jitsi Meet directory"
 
 echo "Hoàn thành cấu hình giao diện tùy chỉnh!"
