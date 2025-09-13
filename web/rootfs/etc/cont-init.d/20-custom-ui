@@ -259,41 +259,28 @@ if [ ! -f "/usr/share/jitsi-meet/images/favicon.ico" ]; then
     fi
 fi
 
-# Thêm nginx config đơn giản để serve JS files
-echo "Thêm nginx config để serve JS files..."
+# Xóa nginx config conflict và dùng cách đơn giản
+echo "Xóa nginx config conflict..."
 
-# Tạo nginx config đúng syntax với server block
-cat > /etc/nginx/conf.d/nextgen-js.conf << 'EOF'
-server {
-    # Serve NextGen Meet JS files
-    location /js/nextgen-design-tokens.js {
-        alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
-        add_header Content-Type application/javascript;
-        expires 1d;
-    }
+# Xóa nginx-custom.conf nếu có conflict
+if [ -f "/etc/nginx/conf.d/nginx-custom.conf" ]; then
+    echo "Xóa nginx-custom.conf conflict..."
+    rm -f /etc/nginx/conf.d/nginx-custom.conf
+fi
 
-    location /js/nextgen-inject.js {
-        alias /usr/share/jitsi-meet/js/nextgen-inject.js;
-        add_header Content-Type application/javascript;
-        expires 1d;
-    }
+# Xóa nginx config của tôi để tránh conflict
+rm -f /etc/nginx/conf.d/nextgen-js.conf
 
-    # Serve interface_config.js
-    location /interface_config.js {
-        alias /usr/share/jitsi-meet/interface_config.js;
-        add_header Content-Type application/javascript;
-        expires 1d;
-    }
-}
-EOF
-
-# Kiểm tra files tồn tại trước khi test nginx
+# Kiểm tra files tồn tại
 echo "Kiểm tra files tồn tại..."
 ls -la /usr/share/jitsi-meet/js/
 ls -la /usr/share/jitsi-meet/interface_config.js
 
-# Test nginx config
-echo "Testing nginx config..."
+# Files đã được copy trực tiếp vào Jitsi Meet directory
+echo "Files đã được copy trực tiếp vào Jitsi Meet directory"
+
+# Test nginx config sau khi xóa conflict
+echo "Test nginx config sau khi xóa conflict..."
 nginx -t
 if [ $? -eq 0 ]; then
     echo "Nginx config test passed"
@@ -306,21 +293,16 @@ if [ $? -eq 0 ]; then
     fi
 else
     echo "Nginx config test failed"
-    echo "Xem nginx config:"
-    cat /etc/nginx/conf.d/nextgen-js.conf
-    
-    # Fallback: Copy files vào thư mục nginx serve mặc định
-    echo "Fallback: Copy JS files vào thư mục nginx serve mặc định..."
-    mkdir -p /usr/share/jitsi-meet/js
-    cp /usr/share/jitsi-meet/js/nextgen-design-tokens.js /usr/share/jitsi-meet/js/nextgen-design-tokens.js.bak
-    cp /usr/share/jitsi-meet/js/nextgen-inject.js /usr/share/jitsi-meet/js/nextgen-inject.js.bak
-    
-    # Tạo symlinks nếu cần
-    ln -sf /usr/share/jitsi-meet/js/nextgen-design-tokens.js /usr/share/jitsi-meet/js/nextgen-design-tokens.js
-    ln -sf /usr/share/jitsi-meet/js/nextgen-inject.js /usr/share/jitsi-meet/js/nextgen-inject.js
-    
-    echo "Đã tạo fallback cho JS files"
 fi
+
+# Debug: Kiểm tra nội dung JS files
+echo "Debug: Kiểm tra nội dung JS files..."
+echo "=== nextgen-design-tokens.js ==="
+head -5 /usr/share/jitsi-meet/js/nextgen-design-tokens.js
+echo "=== nextgen-inject.js ==="
+head -5 /usr/share/jitsi-meet/js/nextgen-inject.js
+echo "=== interface_config.js ==="
+head -5 /usr/share/jitsi-meet/interface_config.js
 
 echo "NextGen Meet files đã được copy trực tiếp vào Jitsi Meet directory"
 
