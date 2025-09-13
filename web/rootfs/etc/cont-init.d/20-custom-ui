@@ -278,13 +278,35 @@ if [ -f "/etc/nginx/conf.d/nginx-custom.conf" ]; then
     rm -f /etc/nginx/conf.d/nginx-custom.conf
 fi
 
-# Tạo nginx config đơn giản để serve images
-echo "Tạo nginx config đơn giản để serve images..."
-cat > /etc/nginx/conf.d/nextgen-images.conf << 'EOF'
-# Serve NextGen Meet images
-location /images/ {
-    alias /usr/share/jitsi-meet/images/;
-    expires 7d;
+# Tạo nginx config đúng syntax với server block
+echo "Tạo nginx config đúng syntax với server block..."
+cat > /etc/nginx/conf.d/nextgen-meet.conf << 'EOF'
+server {
+    # Serve NextGen Meet JS files
+    location /js/nextgen-design-tokens.js {
+        alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
+        add_header Content-Type application/javascript;
+        expires 1d;
+    }
+
+    location /js/nextgen-inject.js {
+        alias /usr/share/jitsi-meet/js/nextgen-inject.js;
+        add_header Content-Type application/javascript;
+        expires 1d;
+    }
+
+    # Serve interface_config.js
+    location /interface_config.js {
+        alias /usr/share/jitsi-meet/interface_config.js;
+        add_header Content-Type application/javascript;
+        expires 1d;
+    }
+
+    # Serve NextGen Meet images
+    location /images/ {
+        alias /usr/share/jitsi-meet/images/;
+        expires 7d;
+    }
 }
 EOF
 
@@ -310,13 +332,22 @@ chmod 644 /usr/share/jitsi-meet/interface_config.js
 
 echo "Files đã được copy trực tiếp vào Jitsi Meet directory"
 
-# Test nginx config đơn giản
-echo "Test nginx config đơn giản..."
+# Test nginx config với server block
+echo "Test nginx config với server block..."
 nginx -t
 if [ $? -eq 0 ]; then
     echo "Nginx config test passed"
+    # Reload nginx nếu đang chạy
+    if [ -f "/var/run/nginx.pid" ]; then
+        nginx -s reload
+        echo "Đã reload nginx config"
+    else
+        echo "Nginx chưa chạy, sẽ start sau"
+    fi
 else
     echo "Nginx config test failed"
+    echo "Xem nginx config:"
+    cat /etc/nginx/conf.d/nextgen-meet.conf
 fi
 
 # Debug: Kiểm tra nội dung JS files
@@ -353,6 +384,15 @@ echo "Testing nextgen-inject.js..."
 curl -I http://localhost/js/nextgen-inject.js 2>/dev/null | head -3 || echo "Cannot test locally"
 echo "Testing interface_config.js..."
 curl -I http://localhost/interface_config.js 2>/dev/null | head -3 || echo "Cannot test locally"
+
+# Test nội dung JS files
+echo "Test nội dung JS files..."
+echo "=== nextgen-design-tokens.js content ==="
+head -3 /usr/share/jitsi-meet/js/nextgen-design-tokens.js
+echo "=== nextgen-inject.js content ==="
+head -3 /usr/share/jitsi-meet/js/nextgen-inject.js
+echo "=== interface_config.js content ==="
+head -3 /usr/share/jitsi-meet/interface_config.js
 
 echo "NextGen Meet files đã được copy trực tiếp vào Jitsi Meet directory"
 
