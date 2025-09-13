@@ -175,7 +175,16 @@
                 PROVIDER_NAME: 'thanhnguyen.group',
                 APP_NAME: 'NextGen Meet',
                 LANG_DETECTION: true,
-                DEFAULT_LANGUAGE: 'vi'
+                DEFAULT_LANGUAGE: 'vi',
+                DISABLE_DOMINANT_SPEAKER_INDICATOR: false,
+                DISABLE_FOCUS_INDICATOR: false,
+                DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
+                DISABLE_PRESENCE_STATUS: false,
+                DISABLE_RINGING: false,
+                AUDIO_LEVEL_PRIMARY_COLOR: 'rgba(255,255,255,0.4)',
+                AUDIO_LEVEL_SECONDARY_COLOR: 'rgba(255,255,255,0.2)',
+                POLICY_LOGO: null,
+                PROVIDER_URL: 'https://thanhnguyen.group'
             };
             console.log('NextGen Meet: Created fallback interfaceConfig');
         }
@@ -225,6 +234,22 @@
         
         // Start observing
         observer.observe(document.getElementById('react'), { childList: true, subtree: true });
+        
+        // Handle Excalidraw errors gracefully
+        window.addEventListener('unhandledrejection', function(event) {
+            if (event.reason && event.reason.message && event.reason.message.includes('excalidraw')) {
+                console.log('NextGen Meet: Ignoring Excalidraw error (whiteboard feature disabled)');
+                event.preventDefault();
+            }
+        });
+        
+        // Handle ChunkLoadError for Excalidraw
+        window.addEventListener('error', function(event) {
+            if (event.message && event.message.includes('excalidraw')) {
+                console.log('NextGen Meet: Ignoring Excalidraw ChunkLoadError (whiteboard feature disabled)');
+                event.preventDefault();
+            }
+        });
     </script>
 </body>
 </html>
