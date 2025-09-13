@@ -160,6 +160,27 @@ fi
 if [ -f "/config/jitsi-index.html" ]; then
     cp /config/jitsi-index.html /usr/share/jitsi-meet/index.html
     echo "Đã override index.html với NextGen Meet"
+else
+    # Fallback: Tạo index.html đơn giản nếu không có
+    cat > /usr/share/jitsi-meet/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NextGen Meet - Họp trực tuyến đẳng cấp</title>
+    <link rel="stylesheet" href="css/all.css">
+    <link rel="stylesheet" href="css/nextgen-override.css">
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body>
+    <div id="react"></div>
+    <script src="libs/lib-jitsi-meet.min.js"></script>
+    <script src="libs/app.bundle.min.js"></script>
+</body>
+</html>
+EOF
+    echo "Đã tạo index.html fallback"
 fi
 
 # Override interface_config.js
@@ -174,7 +195,89 @@ if [ ! -f "/config/images/welcome-background.png" ]; then
     # Có thể thêm logic tạo background ở đây
 fi
 
-# Không cần nginx config nữa vì đã copy trực tiếp files
+# Cấu hình nginx để serve NextGen Meet files
+echo "Cấu hình nginx để serve NextGen Meet files..."
+
+# Tạo nginx config đúng syntax
+cat > /etc/nginx/conf.d/nextgen-meet.conf << 'EOF'
+server {
+    # Serve NextGen Meet CSS files
+    location /css/nextgen-variables.css {
+        alias /usr/share/jitsi-meet/css/nextgen-variables.css;
+        add_header Content-Type text/css;
+        expires 1d;
+    }
+    
+    location /css/nextgen-mixins.css {
+        alias /usr/share/jitsi-meet/css/nextgen-mixins.css;
+        add_header Content-Type text/css;
+        expires 1d;
+    }
+    
+    location /css/nextgen-components.css {
+        alias /usr/share/jitsi-meet/css/nextgen-components.css;
+        add_header Content-Type text/css;
+        expires 1d;
+    }
+    
+    location /css/nextgen-toolbar.css {
+        alias /usr/share/jitsi-meet/css/nextgen-toolbar.css;
+        add_header Content-Type text/css;
+        expires 1d;
+    }
+    
+    location /css/nextgen-video.css {
+        alias /usr/share/jitsi-meet/css/nextgen-video.css;
+        add_header Content-Type text/css;
+        expires 1d;
+    }
+    
+    location /css/nextgen-animations.css {
+        alias /usr/share/jitsi-meet/css/nextgen-animations.css;
+        add_header Content-Type text/css;
+        expires 1d;
+    }
+    
+    location /css/nextgen-override.css {
+        alias /usr/share/jitsi-meet/css/nextgen-override.css;
+        add_header Content-Type text/css;
+        expires 1d;
+    }
+    
+    location /css/custom.css {
+        alias /usr/share/jitsi-meet/css/custom.css;
+        add_header Content-Type text/css;
+        expires 1d;
+    }
+    
+    # Serve NextGen Meet JS files
+    location /js/nextgen-design-tokens.js {
+        alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
+        add_header Content-Type application/javascript;
+        expires 1d;
+    }
+    
+    location /js/nextgen-inject.js {
+        alias /usr/share/jitsi-meet/js/nextgen-inject.js;
+        add_header Content-Type application/javascript;
+        expires 1d;
+    }
+}
+EOF
+
+# Test nginx config
+nginx -t
+if [ $? -eq 0 ]; then
+    echo "Nginx config test passed"
+    # Reload nginx nếu đang chạy
+    if [ -f "/var/run/nginx.pid" ]; then
+        nginx -s reload
+        echo "Đã reload nginx config"
+    fi
+else
+    echo "Nginx config test failed"
+fi
+
 echo "NextGen Meet files đã được copy trực tiếp vào Jitsi Meet directory"
 
 echo "Hoàn thành cấu hình giao diện tùy chỉnh!"
