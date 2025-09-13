@@ -174,9 +174,26 @@ console.log('NextGen Meet loaded');
 EOF
 fi
 
-# Đảm bảo files có quyền đúng
+# Đảm bảo files có quyền đúng và nội dung đúng
 chmod 644 /usr/share/jitsi-meet/js/nextgen-design-tokens.js
 chmod 644 /usr/share/jitsi-meet/js/nextgen-inject.js
+
+# Kiểm tra nội dung files
+echo "Kiểm tra nội dung JS files..."
+if [ -f "/usr/share/jitsi-meet/js/nextgen-design-tokens.js" ]; then
+    echo "nextgen-design-tokens.js tồn tại"
+    head -3 /usr/share/jitsi-meet/js/nextgen-design-tokens.js
+else
+    echo "nextgen-design-tokens.js không tồn tại"
+fi
+
+if [ -f "/usr/share/jitsi-meet/js/nextgen-inject.js" ]; then
+    echo "nextgen-inject.js tồn tại"
+    head -3 /usr/share/jitsi-meet/js/nextgen-inject.js
+else
+    echo "nextgen-inject.js không tồn tại"
+fi
+
 echo "Đã set quyền cho JS files"
 
 # Override main index.html
@@ -242,7 +259,50 @@ if [ ! -f "/usr/share/jitsi-meet/images/favicon.ico" ]; then
     fi
 fi
 
-# Không cần nginx config phức tạp vì files đã được copy trực tiếp
+# Thêm nginx config đơn giản để serve JS files
+echo "Thêm nginx config để serve JS files..."
+
+# Tạo nginx config đơn giản
+cat > /etc/nginx/conf.d/nextgen-js.conf << 'EOF'
+# Serve NextGen Meet JS files
+location /js/nextgen-design-tokens.js {
+    alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
+    add_header Content-Type application/javascript;
+    expires 1d;
+}
+
+location /js/nextgen-inject.js {
+    alias /usr/share/jitsi-meet/js/nextgen-inject.js;
+    add_header Content-Type application/javascript;
+    expires 1d;
+}
+
+# Serve interface_config.js
+location /interface_config.js {
+    alias /usr/share/jitsi-meet/interface_config.js;
+    add_header Content-Type application/javascript;
+    expires 1d;
+}
+EOF
+
+# Test nginx config
+echo "Testing nginx config..."
+nginx -t
+if [ $? -eq 0 ]; then
+    echo "Nginx config test passed"
+    # Reload nginx nếu đang chạy
+    if [ -f "/var/run/nginx.pid" ]; then
+        nginx -s reload
+        echo "Đã reload nginx config"
+    else
+        echo "Nginx chưa chạy, sẽ start sau"
+    fi
+else
+    echo "Nginx config test failed"
+    echo "Xem nginx config:"
+    cat /etc/nginx/conf.d/nextgen-js.conf
+fi
+
 echo "NextGen Meet files đã được copy trực tiếp vào Jitsi Meet directory"
 
 echo "NextGen Meet files đã được copy trực tiếp vào Jitsi Meet directory"
