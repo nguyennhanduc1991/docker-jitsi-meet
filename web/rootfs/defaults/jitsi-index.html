@@ -123,10 +123,31 @@
         .welcome-card .subtitle {
             color: rgba(255, 255, 255, 0.8) !important;
         }
+        
+        /* Loading spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-spinner {
+            animation: spin 1s linear infinite;
+        }
     </style>
 </head>
 <body class="nextgen-meet">
-    <div id="react"></div>
+    <div id="react">
+        <!-- Fallback content khi Jitsi Meet chưa load -->
+        <div class="welcome-card" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; padding: 2rem;">
+            <div class="logo-container" style="margin-bottom: 2rem;">
+                <img src="images/jitsilogo.png" alt="NextGen Meet" style="max-width: 200px; height: auto;">
+            </div>
+            <h2 style="color: white; font-size: 2.5rem; margin-bottom: 1rem; font-weight: 300;">NextGen Meet</h2>
+            <p class="title" style="color: rgba(255, 255, 255, 0.9); font-size: 1.2rem; margin-bottom: 0.5rem;">Kiến tạo Trải nghiệm Hội nghị Truyền hình Đẳng cấp</p>
+            <p class="subtitle" style="color: rgba(255, 255, 255, 0.7); font-size: 1rem; margin-bottom: 2rem;">Đang tải giao diện...</p>
+            <div class="loading-spinner" style="width: 40px; height: 40px; border: 3px solid rgba(255, 255, 255, 0.3); border-top: 3px solid white; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+        </div>
+    </div>
     
     <!-- Interface Config - Load trước tất cả -->
     <script src="interface_config.js"></script>
@@ -137,5 +158,18 @@
     <!-- Jitsi Meet JavaScript sẽ được load sau -->
     <script src="libs/lib-jitsi-meet.min.js"></script>
     <script src="libs/app.bundle.min.js"></script>
+    
+    <!-- Debug: Kiểm tra Jitsi Meet loading -->
+    <script>
+        console.log('NextGen Meet: HTML loaded');
+        console.log('NextGen Meet: interfaceConfig available:', typeof interfaceConfig !== 'undefined');
+        console.log('NextGen Meet: NextGenDesignTokens available:', typeof NextGenDesignTokens !== 'undefined');
+        
+        // Kiểm tra Jitsi Meet loading
+        window.addEventListener('load', function() {
+            console.log('NextGen Meet: Window loaded');
+            console.log('NextGen Meet: React div:', document.getElementById('react'));
+        });
+    </script>
 </body>
 </html>
