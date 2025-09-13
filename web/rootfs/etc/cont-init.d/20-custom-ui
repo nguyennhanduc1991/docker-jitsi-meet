@@ -4,20 +4,29 @@
 
 echo "Cấu hình giao diện tùy chỉnh..."
 
-# Copy các file cấu hình tùy chỉnh
-if [ -f "/defaults/interface_config.js" ]; then
+# Copy các file cấu hình tùy chỉnh từ /custom volume
+if [ -f "/custom/interface_config.js" ]; then
+    cp /custom/interface_config.js /config/interface_config.js
+    echo "Đã copy interface_config.js từ /custom"
+elif [ -f "/defaults/interface_config.js" ]; then
     cp /defaults/interface_config.js /config/interface_config.js
-    echo "Đã copy interface_config.js"
+    echo "Đã copy interface_config.js từ /defaults"
 fi
 
-if [ -f "/defaults/custom.css" ]; then
+if [ -f "/custom/custom.css" ]; then
+    cp /custom/custom.css /config/custom.css
+    echo "Đã copy custom.css từ /custom"
+elif [ -f "/defaults/custom.css" ]; then
     cp /defaults/custom.css /config/custom.css
-    echo "Đã copy custom.css"
+    echo "Đã copy custom.css từ /defaults"
 fi
 
-if [ -f "/defaults/index.html" ]; then
+if [ -f "/custom/index.html" ]; then
+    cp /custom/index.html /config/index.html
+    echo "Đã copy index.html từ /custom"
+elif [ -f "/defaults/index.html" ]; then
     cp /defaults/index.html /config/index.html
-    echo "Đã copy index.html"
+    echo "Đã copy index.html từ /defaults"
 fi
 
 # Tạo thư mục images nếu chưa có
@@ -35,8 +44,50 @@ if [ ! -f "/config/images/logo.png" ]; then
     # Có thể thêm logic tạo logo ở đây
 fi
 
+# Copy các file NextGen CSS và JS từ /custom volume
+if [ -f "/custom/nextgen-variables.css" ]; then
+    cp /custom/nextgen-variables.css /config/nextgen-variables.css
+    echo "Đã copy nextgen-variables.css từ /custom"
+fi
+
+if [ -f "/custom/nextgen-mixins.css" ]; then
+    cp /custom/nextgen-mixins.css /config/nextgen-mixins.css
+    echo "Đã copy nextgen-mixins.css từ /custom"
+fi
+
+if [ -f "/custom/nextgen-components.css" ]; then
+    cp /custom/nextgen-components.css /config/nextgen-components.css
+    echo "Đã copy nextgen-components.css từ /custom"
+fi
+
+if [ -f "/custom/nextgen-toolbar.css" ]; then
+    cp /custom/nextgen-toolbar.css /config/nextgen-toolbar.css
+    echo "Đã copy nextgen-toolbar.css từ /custom"
+fi
+
+if [ -f "/custom/nextgen-video.css" ]; then
+    cp /custom/nextgen-video.css /config/nextgen-video.css
+    echo "Đã copy nextgen-video.css từ /custom"
+fi
+
+if [ -f "/custom/nextgen-animations.css" ]; then
+    cp /custom/nextgen-animations.css /config/nextgen-animations.css
+    echo "Đã copy nextgen-animations.css từ /custom"
+fi
+
+if [ -f "/custom/nextgen-design-tokens.js" ]; then
+    cp /custom/nextgen-design-tokens.js /config/nextgen-design-tokens.js
+    echo "Đã copy nextgen-design-tokens.js từ /custom"
+fi
+
+# Copy welcome background image
+if [ -f "/custom/images/welcome-background.png" ]; then
+    cp /custom/images/welcome-background.png /config/images/welcome-background.png
+    echo "Đã copy welcome-background.png từ /custom"
+fi
+
 # Tạo file welcome background mặc định nếu chưa có
-if [ ! -f "/config/images/welcome-background.jpg" ]; then
+if [ ! -f "/config/images/welcome-background.png" ]; then
     echo "Tạo welcome background mặc định..."
     # Có thể thêm logic tạo background ở đây
 fi
