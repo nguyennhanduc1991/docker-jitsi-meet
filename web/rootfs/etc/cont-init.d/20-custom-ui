@@ -25,6 +25,11 @@ if [ -f "/custom/jitsi-index.html" ]; then
     echo "Đã copy jitsi-index.html từ /custom"
 fi
 
+if [ -f "/custom/nginx-custom.conf" ]; then
+    cp /custom/nginx-custom.conf /etc/nginx/conf.d/nginx-custom.conf
+    echo "Đã copy nginx-custom.conf từ /custom"
+fi
+
 # Tạo thư mục images nếu chưa có
 mkdir -p /config/images
 
@@ -189,6 +194,14 @@ EOF
 if [ -f "/var/run/nginx.pid" ]; then
     nginx -s reload
     echo "Đã reload nginx config"
+else
+    # Nếu nginx chưa chạy, test config trước
+    nginx -t
+    if [ $? -eq 0 ]; then
+        echo "Nginx config test passed"
+    else
+        echo "Nginx config test failed"
+    fi
 fi
 
 echo "Hoàn thành cấu hình giao diện tùy chỉnh!"
