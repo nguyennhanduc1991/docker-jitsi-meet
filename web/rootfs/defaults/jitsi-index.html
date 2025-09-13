@@ -163,6 +163,24 @@
     <!-- Interface Config - Load trước tất cả -->
     <script src="interface_config.js"></script>
     
+    <!-- Global config fallback -->
+    <script>
+        if (typeof interfaceConfig === 'undefined') {
+            window.interfaceConfig = {
+                TOOLBAR_BUTTONS: ['microphone', 'camera', 'closedcaptions', 'desktop', 'fullscreen', 'fodeviceselection', 'hangup', 'profile', 'chat', 'recording', 'livestreaming', 'etherpad', 'sharedvideo', 'settings', 'raisehand', 'videoquality', 'filmstrip', 'invite', 'feedback', 'stats', 'shortcuts', 'tileview', 'videobackgroundblur', 'download', 'help', 'mute-everyone', 'e2ee', 'security'],
+                SHOW_JITSI_WATERMARK: false,
+                SHOW_WATERMARK_FOR_GUESTS: false,
+                SHOW_POWERED_BY: false,
+                DEFAULT_LOGO_URL: 'images/jitsilogo.png',
+                PROVIDER_NAME: 'thanhnguyen.group',
+                APP_NAME: 'NextGen Meet',
+                LANG_DETECTION: true,
+                DEFAULT_LANGUAGE: 'vi'
+            };
+            console.log('NextGen Meet: Created fallback interfaceConfig');
+        }
+    </script>
+    
     <!-- NextGen Meet JavaScript -->
     <script src="nextgen-inject.js"></script>
     

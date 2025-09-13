@@ -278,73 +278,37 @@ if [ -f "/etc/nginx/conf.d/nginx-custom.conf" ]; then
     rm -f /etc/nginx/conf.d/nginx-custom.conf
 fi
 
-# Tạo nginx config đúng syntax với server block
-echo "Tạo nginx config đúng syntax với server block..."
+# Tạo nginx config đơn giản hơn
+echo "Tạo nginx config đơn giản hơn..."
 cat > /etc/nginx/conf.d/nextgen-meet.conf << 'EOF'
-server {
-    listen 80;
-    server_name _;
-    
-    # Serve NextGen Meet JS files với MIME type đúng
-    location /js/nextgen-design-tokens.js {
-        alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
-        add_header Content-Type "application/javascript; charset=utf-8";
-        add_header Cache-Control "public, max-age=86400";
-        expires 1d;
-    }
+# NextGen Meet Configuration
+location /js/nextgen-design-tokens.js {
+    alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
+    add_header Content-Type "application/javascript; charset=utf-8";
+}
 
-    location /js/nextgen-inject.js {
-        alias /usr/share/jitsi-meet/js/nextgen-inject.js;
-        add_header Content-Type "application/javascript; charset=utf-8";
-        add_header Cache-Control "public, max-age=86400";
-        expires 1d;
-    }
+location /js/nextgen-inject.js {
+    alias /usr/share/jitsi-meet/js/nextgen-inject.js;
+    add_header Content-Type "application/javascript; charset=utf-8";
+}
 
-    # Serve interface_config.js
-    location /interface_config.js {
-        alias /usr/share/jitsi-meet/interface_config.js;
-        add_header Content-Type "application/javascript; charset=utf-8";
-        add_header Cache-Control "public, max-age=86400";
-        expires 1d;
-    }
+location /interface_config.js {
+    alias /usr/share/jitsi-meet/interface_config.js;
+    add_header Content-Type "application/javascript; charset=utf-8";
+}
 
-    # Serve NextGen Meet images
-    location /images/ {
-        alias /usr/share/jitsi-meet/images/;
-        add_header Cache-Control "public, max-age=604800";
-        expires 7d;
-    }
+location /nextgen-design-tokens.js {
+    alias /usr/share/jitsi-meet/nextgen-design-tokens.js;
+    add_header Content-Type "application/javascript; charset=utf-8";
+}
 
-    # Serve Jitsi Meet core JS files với MIME type đúng
-    location /libs/ {
-        alias /usr/share/jitsi-meet/libs/;
-        add_header Content-Type "application/javascript; charset=utf-8";
-        add_header Cache-Control "public, max-age=86400";
-        expires 1d;
-    }
+location /nextgen-inject.js {
+    alias /usr/share/jitsi-meet/nextgen-inject.js;
+    add_header Content-Type "application/javascript; charset=utf-8";
+}
 
-    # Serve all JS files với MIME type đúng
-    location ~* \.js$ {
-        root /usr/share/jitsi-meet;
-        add_header Content-Type "application/javascript; charset=utf-8";
-        add_header Cache-Control "public, max-age=86400";
-        expires 1d;
-    }
-
-    # Fallback: Serve JS files từ thư mục root
-    location /nextgen-design-tokens.js {
-        alias /usr/share/jitsi-meet/nextgen-design-tokens.js;
-        add_header Content-Type "application/javascript; charset=utf-8";
-        add_header Cache-Control "public, max-age=86400";
-        expires 1d;
-    }
-
-    location /nextgen-inject.js {
-        alias /usr/share/jitsi-meet/nextgen-inject.js;
-        add_header Content-Type "application/javascript; charset=utf-8";
-        add_header Cache-Control "public, max-age=86400";
-        expires 1d;
-    }
+location /images/ {
+    alias /usr/share/jitsi-meet/images/;
 }
 EOF
 
