@@ -307,6 +307,19 @@ server {
         alias /usr/share/jitsi-meet/images/;
         expires 7d;
     }
+
+    # Fallback: Serve JS files từ thư mục root
+    location /nextgen-design-tokens.js {
+        alias /usr/share/jitsi-meet/nextgen-design-tokens.js;
+        add_header Content-Type application/javascript;
+        expires 1d;
+    }
+
+    location /nextgen-inject.js {
+        alias /usr/share/jitsi-meet/nextgen-inject.js;
+        add_header Content-Type application/javascript;
+        expires 1d;
+    }
 }
 EOF
 
@@ -330,7 +343,24 @@ chmod 644 /usr/share/jitsi-meet/js/nextgen-design-tokens.js
 chmod 644 /usr/share/jitsi-meet/js/nextgen-inject.js
 chmod 644 /usr/share/jitsi-meet/interface_config.js
 
+# Fallback: Copy JS files vào thư mục root để nginx serve mặc định
+echo "Fallback: Copy JS files vào thư mục root..."
+cp /usr/share/jitsi-meet/js/nextgen-design-tokens.js /usr/share/jitsi-meet/nextgen-design-tokens.js
+cp /usr/share/jitsi-meet/js/nextgen-inject.js /usr/share/jitsi-meet/nextgen-inject.js
+chmod 644 /usr/share/jitsi-meet/nextgen-design-tokens.js
+chmod 644 /usr/share/jitsi-meet/nextgen-inject.js
+echo "Đã copy JS files vào thư mục root làm fallback"
+
 echo "Files đã được copy trực tiếp vào Jitsi Meet directory"
+
+# Debug: Kiểm tra tất cả nginx configs
+echo "Debug: Kiểm tra tất cả nginx configs..."
+echo "=== Nginx configs trong /etc/nginx/conf.d/ ==="
+ls -la /etc/nginx/conf.d/
+echo "=== Nginx main config ==="
+head -20 /etc/nginx/nginx.conf
+echo "=== NextGen Meet config ==="
+cat /etc/nginx/conf.d/nextgen-meet.conf
 
 # Test nginx config với server block
 echo "Test nginx config với server block..."
