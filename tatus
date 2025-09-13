@@ -1,0 +1,37 @@
+* [32mmain[m
+  [31mremotes/origin/HEAD[m -> origin/master
+  [31mremotes/origin/main[m
+  [31mremotes/origin/master[m
+  [31mremotes/upstream/HEAD[m -> upstream/master
+  [31mremotes/upstream/aaronkvanmeerten/jitsi-customizations[m
+  [31mremotes/upstream/aaronkvanmeerten/jvb-websocket-deterministic-ip[m
+  [31mremotes/upstream/aaronkvanmeerten/prosody-0.12-patch-fix[m
+  [31mremotes/upstream/bookworm[m
+  [31mremotes/upstream/dev[m
+  [31mremotes/upstream/etherpad-rules[m
+  [31mremotes/upstream/extended-transcriber-support[m
+  [31mremotes/upstream/filesharing-url-support[m
+  [31mremotes/upstream/fix-bosh-for-subdomains[m
+  [31mremotes/upstream/fix-jvb-config[m
+  [31mremotes/upstream/fix-missing-var[m
+  [31mremotes/upstream/fix-opus-red-codec-close[m
+  [31mremotes/upstream/jibri-arm[m
+  [31mremotes/upstream/jigasi-jibri-versons[m
+  [31mremotes/upstream/k8s-helm[m
+  [31mremotes/upstream/master[m
+  [31mremotes/upstream/move-to-shell[m
+  [31mremotes/upstream/oianc/jaas-account[m
+  [31mremotes/upstream/oianc/jitsi-components[m
+  [31mremotes/upstream/oianc/jitsi-components-dial-in[m
+  [31mremotes/upstream/oianc/jitsi-components-misc[m
+  [31mremotes/upstream/oianc/jitsi-installation[m
+  [31mremotes/upstream/prosody-build-from-url[m
+  [31mremotes/upstream/prosody-shortlived-tokens[m
+  [31mremotes/upstream/remove-prosody-admins[m
+  [31mremotes/upstream/remove-pubsub[m
+  [31mremotes/upstream/sctp-relay-jicofo[m
+  [31mremotes/upstream/simplify-prosody-build[m
+  [31mremotes/upstream/spot[m
+  [31mremotes/upstream/unstable-no-more-schedule[m
+  [31mremotes/upstream/use-meet-stun-servers[m
+  [31mremotes/upstream/web-add-config-options[m
