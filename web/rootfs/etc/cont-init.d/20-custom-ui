@@ -356,8 +356,10 @@ chmod 644 /usr/share/jitsi-meet/interface_config.js
 echo "Fallback: Copy JS files vào thư mục root..."
 cp /usr/share/jitsi-meet/js/nextgen-design-tokens.js /usr/share/jitsi-meet/nextgen-design-tokens.js
 cp /usr/share/jitsi-meet/js/nextgen-inject.js /usr/share/jitsi-meet/nextgen-inject.js
+cp /usr/share/jitsi-meet/interface_config.js /usr/share/jitsi-meet/interface_config.js
 chmod 644 /usr/share/jitsi-meet/nextgen-design-tokens.js
 chmod 644 /usr/share/jitsi-meet/nextgen-inject.js
+chmod 644 /usr/share/jitsi-meet/interface_config.js
 echo "Đã copy JS files vào thư mục root làm fallback"
 
 echo "Files đã được copy trực tiếp vào Jitsi Meet directory"
