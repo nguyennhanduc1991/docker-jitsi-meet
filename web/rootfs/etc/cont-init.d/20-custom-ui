@@ -176,6 +176,19 @@ location /interface_config.js {
     add_header Content-Type application/javascript;
     expires 1d;
 }
+
+# Serve nextgen-inject.js
+location /js/nextgen-inject.js {
+    alias /config/nextgen-inject.js;
+    add_header Content-Type application/javascript;
+    expires 1d;
+}
 EOF
+
+# Reload nginx để áp dụng config mới
+if [ -f "/var/run/nginx.pid" ]; then
+    nginx -s reload
+    echo "Đã reload nginx config"
+fi
 
 echo "Hoàn thành cấu hình giao diện tùy chỉnh!"
