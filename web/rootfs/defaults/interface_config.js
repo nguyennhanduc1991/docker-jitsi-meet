@@ -48,6 +48,22 @@ var interfaceConfig = {
     WELCOME_PAGE_ADDITIONAL_CARD_URL: '',
     WELCOME_PAGE_DISPLAY_JOIN_IN_PROGRESS: true,
     WELCOME_PAGE_LOGO_URL: 'https://meet.thanhnguyen.group/images/logo.png',
+    
+    // NextGen Meet Custom CSS
+    CUSTOM_CSS_URLS: [
+        '/css/nextgen-variables.css',
+        '/css/nextgen-mixins.css', 
+        '/css/nextgen-components.css',
+        '/css/nextgen-toolbar.css',
+        '/css/nextgen-video.css',
+        '/css/nextgen-animations.css',
+        '/css/custom.css'
+    ],
+    
+    // NextGen Meet Custom JS
+    CUSTOM_JS_URLS: [
+        '/js/nextgen-design-tokens.js'
+    ],
     WELCOME_PAGE_PARTICIPANT_TOOLBAR_BUTTONS: [],
     WELCOME_PAGE_SHOW_LOGO: true,
     WELCOME_PAGE_TITLE: 'Chào mừng đến với Thanh Nguyen Meet',
