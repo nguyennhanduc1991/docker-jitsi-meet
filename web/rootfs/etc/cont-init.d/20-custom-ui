@@ -95,6 +95,16 @@ fi
 if [ -f "/custom/images/welcome-background.png" ]; then
     cp /custom/images/welcome-background.png /config/images/welcome-background.png
     echo "Đã copy welcome-background.png từ /custom"
+else
+    echo "Không tìm thấy welcome-background.png trong /custom"
+fi
+
+# Copy welcome background vào thư mục Jitsi Meet
+if [ -f "/config/images/welcome-background.png" ]; then
+    cp /config/images/welcome-background.png /usr/share/jitsi-meet/images/welcome-background.png
+    echo "Đã copy welcome-background.png vào /usr/share/jitsi-meet/images/"
+else
+    echo "Không tìm thấy welcome-background.png để copy"
 fi
 
 # Copy NextGen CSS files trực tiếp vào thư mục Jitsi Meet
@@ -268,27 +278,13 @@ if [ -f "/etc/nginx/conf.d/nginx-custom.conf" ]; then
     rm -f /etc/nginx/conf.d/nginx-custom.conf
 fi
 
-# Tạo nginx config đúng cách để serve JS files
-echo "Tạo nginx config để serve JS files..."
-cat > /etc/nginx/conf.d/nextgen-js.conf << 'EOF'
-# Serve NextGen Meet JS files
-location /js/nextgen-design-tokens.js {
-    alias /usr/share/jitsi-meet/js/nextgen-design-tokens.js;
-    add_header Content-Type application/javascript;
-    expires 1d;
-}
-
-location /js/nextgen-inject.js {
-    alias /usr/share/jitsi-meet/js/nextgen-inject.js;
-    add_header Content-Type application/javascript;
-    expires 1d;
-}
-
-# Serve interface_config.js
-location /interface_config.js {
-    alias /usr/share/jitsi-meet/interface_config.js;
-    add_header Content-Type application/javascript;
-    expires 1d;
+# Tạo nginx config đơn giản để serve images
+echo "Tạo nginx config đơn giản để serve images..."
+cat > /etc/nginx/conf.d/nextgen-images.conf << 'EOF'
+# Serve NextGen Meet images
+location /images/ {
+    alias /usr/share/jitsi-meet/images/;
+    expires 7d;
 }
 EOF
 
@@ -297,25 +293,30 @@ echo "Kiểm tra files tồn tại..."
 ls -la /usr/share/jitsi-meet/js/
 ls -la /usr/share/jitsi-meet/interface_config.js
 
-# Files đã được copy trực tiếp vào Jitsi Meet directory
+# Copy JS files vào thư mục nginx serve mặc định
+echo "Copy JS files vào thư mục nginx serve mặc định..."
+
+# Tạo thư mục js trong thư mục nginx serve mặc định
+mkdir -p /usr/share/jitsi-meet/js
+
+# Copy JS files vào thư mục nginx serve mặc định
+cp /usr/share/jitsi-meet/js/nextgen-design-tokens.js /usr/share/jitsi-meet/js/nextgen-design-tokens.js
+cp /usr/share/jitsi-meet/js/nextgen-inject.js /usr/share/jitsi-meet/js/nextgen-inject.js
+
+# Đảm bảo files có quyền đúng
+chmod 644 /usr/share/jitsi-meet/js/nextgen-design-tokens.js
+chmod 644 /usr/share/jitsi-meet/js/nextgen-inject.js
+chmod 644 /usr/share/jitsi-meet/interface_config.js
+
 echo "Files đã được copy trực tiếp vào Jitsi Meet directory"
 
-# Test nginx config sau khi tạo config mới
-echo "Test nginx config sau khi tạo config mới..."
+# Test nginx config đơn giản
+echo "Test nginx config đơn giản..."
 nginx -t
 if [ $? -eq 0 ]; then
     echo "Nginx config test passed"
-    # Reload nginx nếu đang chạy
-    if [ -f "/var/run/nginx.pid" ]; then
-        nginx -s reload
-        echo "Đã reload nginx config"
-    else
-        echo "Nginx chưa chạy, sẽ start sau"
-    fi
 else
     echo "Nginx config test failed"
-    echo "Xem nginx config:"
-    cat /etc/nginx/conf.d/nextgen-js.conf
 fi
 
 # Debug: Kiểm tra nội dung JS files
@@ -326,6 +327,23 @@ echo "=== nextgen-inject.js ==="
 head -5 /usr/share/jitsi-meet/js/nextgen-inject.js
 echo "=== interface_config.js ==="
 head -5 /usr/share/jitsi-meet/interface_config.js
+
+# Debug: Kiểm tra CSS files
+echo "Debug: Kiểm tra CSS files..."
+echo "=== nextgen-override.css ==="
+head -10 /usr/share/jitsi-meet/css/nextgen-override.css
+echo "=== custom.css ==="
+head -10 /usr/share/jitsi-meet/css/custom.css
+
+# Debug: Kiểm tra background image
+echo "Debug: Kiểm tra background image..."
+ls -la /usr/share/jitsi-meet/images/
+if [ -f "/usr/share/jitsi-meet/images/welcome-background.png" ]; then
+    echo "welcome-background.png tồn tại"
+    file /usr/share/jitsi-meet/images/welcome-background.png
+else
+    echo "welcome-background.png không tồn tại"
+fi
 
 # Test JS files accessible
 echo "Test JS files accessible..."
