@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   web:
-    build: ./web
+    image: jitsi/web:${JITSI_IMAGE_VERSION:-unstable}
     container_name: jitsi-meet-web
     restart: unless-stopped
     ports:
@@ -10,7 +10,7 @@ services:
       - "443:443"
     volumes:
       - jitsi-meet-cfg:/config
-      - jitsi-meet-custom:/custom
+      - ./web/rootfs/defaults:/custom:ro
     environment:
       - ENABLE_LETSENCRYPT=1
       - LETSENCRYPT_DOMAIN=${LETSENCRYPT_DOMAIN}
@@ -41,18 +41,25 @@ services:
       - APP_NAME=${APP_NAME}
       - LOGO_URL=${LOGO_URL}
       - PRIMARY_COLOR=${PRIMARY_COLOR}
+      - WELCOME_PAGE_BACKGROUND_URL=${WELCOME_PAGE_BACKGROUND_URL}
+      - WELCOME_PAGE_BACKGROUND_OPACITY=${WELCOME_PAGE_BACKGROUND_OPACITY}
+      - ENABLE_WELCOME_PAGE=${ENABLE_WELCOME_PAGE}
+      - ENABLE_PREJOIN_PAGE=${ENABLE_PREJOIN_PAGE}
+      - TOOLBAR_BUTTONS=${TOOLBAR_BUTTONS}
+      - BACKGROUND_COLOR=${BACKGROUND_COLOR}
+      - ENABLE_GUESTS=${ENABLE_GUESTS}
+      - AUTH_TYPE=${AUTH_TYPE}
     depends_on:
       - prosody
       - jicofo
       - jvb
 
   prosody:
-    build: ./prosody
+    image: jitsi/prosody:${JITSI_IMAGE_VERSION:-unstable}
     container_name: jitsi-meet-prosody
     restart: unless-stopped
     volumes:
       - jitsi-meet-cfg:/config
-      - jitsi-meet-custom:/custom
     environment:
       - XMPP_DOMAIN=${XMPP_DOMAIN}
       - XMPP_AUTH_DOMAIN=${XMPP_AUTH_DOMAIN}
@@ -80,7 +87,7 @@ services:
       - XMPP_MUC_DOMAIN_PREFIX=${XMPP_MUC_DOMAIN_PREFIX}
 
   jicofo:
-    build: ./jicofo
+    image: jitsi/jicofo:${JITSI_IMAGE_VERSION:-unstable}
     container_name: jitsi-meet-jicofo
     restart: unless-stopped
     volumes:
@@ -108,21 +115,11 @@ services:
       - prosody
 
   jvb:
-    build: ./jvb
+    image: jitsi/jvb:${JITSI_IMAGE_VERSION:-unstable}
     container_name: jitsi-meet-jvb
     restart: unless-stopped
     ports:
       - "10000:10000/udp"
-      - "10001:10001/udp"
-      - "10002:10002/udp"
-      - "10003:10003/udp"
-      - "10004:10004/udp"
-      - "10005:10005/udp"
-      - "10006:10006/udp"
-      - "10007:10007/udp"
-      - "10008:10008/udp"
-      - "10009:10009/udp"
-      - "10010:10010/udp"
     volumes:
       - jitsi-meet-cfg:/config
     environment:
